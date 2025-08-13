@@ -49,66 +49,82 @@ impl Tetris {
 
     pub fn move_tetromino_down(&mut self) {
         info!("moving tetromino down");
-        if let Some(ref tet) = self.current_tet && !self.game_over  {
-            let new = self.rules.move_down(tet);
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new = self.rules.move_down(tet);
 
-            if !self.valid(&new) {
-                self.score += Self::score_for_lines(
-                    self.board.add_blocks(&self.rules.blocks(tet), tet.colour)
-                );
-                self.current_tet = None;
-            } else {
-                self.current_tet = Some(new);
+                if !self.valid(&new) {
+                    self.score += Self::score_for_lines(
+                        self.board.add_blocks(&self.rules.blocks(tet), tet.colour),
+                    );
+                    self.current_tet = None;
+                } else {
+                    self.current_tet = Some(new);
+                }
             }
         }
     }
 
     pub fn rotate_clockwise(&mut self) {
         info!("rotating tetromino clockwise");
-        if let Some(ref tet) = self.current_tet && !self.game_over {
-            let new_orientation = tet.orientation.rotate_clockwise();
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new_orientation = tet.orientation.rotate_clockwise();
 
-            let new = self.rules.rotate(tet, new_orientation).into_iter().find(|tet| {
-                self.board.valid_position(&self.rules.blocks(tet))
-            });
+                let new = self
+                    .rules
+                    .rotate(tet, new_orientation)
+                    .into_iter()
+                    .find(|tet| self.board.valid_position(&self.rules.blocks(tet)));
 
-            if new.is_some() {
-                self.current_tet = new;
+                if new.is_some() {
+                    self.current_tet = new;
+                }
             }
         }
     }
 
     pub fn rotate_anticlockwise(&mut self) {
         info!("rotating tetromino anti clockwise");
-        if let Some(ref tet) = self.current_tet && !self.game_over {
-            let new_orientation = tet.orientation.rotate_anticlockwise();
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new_orientation = tet.orientation.rotate_anticlockwise();
 
-            let new = self.rules.rotate(tet, new_orientation).into_iter().find(|tet| self.valid(tet));
+                let new = self
+                    .rules
+                    .rotate(tet, new_orientation)
+                    .into_iter()
+                    .find(|tet| self.valid(tet));
 
-            if new.is_some() {
-                self.current_tet = new;
+                if new.is_some() {
+                    self.current_tet = new;
+                }
             }
         }
     }
 
     pub fn move_tetromino_left(&mut self) {
         info!("moving tetromino left");
-        if let Some(ref tet) = self.current_tet && !self.game_over {
-            let new = self.rules.move_left(tet);
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new = self.rules.move_left(tet);
 
-            if self.valid(&new) {
-                self.current_tet = Some(new);
+                if self.valid(&new) {
+                    self.current_tet = Some(new);
+                }
             }
         }
     }
 
     pub fn move_tetromino_right(&mut self) {
         info!("moving tetromino right");
-        if let Some(ref tet) = self.current_tet && !self.game_over {
-            let new = self.rules.move_right(tet);
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new = self.rules.move_right(tet);
 
-            if self.valid(&new) {
-                self.current_tet = Some(new);
+                if self.valid(&new) {
+                    self.current_tet = Some(new);
+                }
             }
         }
     }
@@ -122,11 +138,13 @@ impl Tetris {
 
     pub fn switch_tetromino(&mut self) {
         info!("switching tetromino");
-        if let Some(ref tet) = self.current_tet && !self.game_over {
-            let new = self.rules.switch(tet);
+        if let Some(ref tet) = self.current_tet {
+            if !self.game_over {
+                let new = self.rules.switch(tet);
 
-            if self.valid(&new) {
-                self.current_tet = Some(new);
+                if self.valid(&new) {
+                    self.current_tet = Some(new);
+                }
             }
         }
     }

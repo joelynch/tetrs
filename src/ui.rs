@@ -79,13 +79,22 @@ impl UI {
 
             for (y, row) in state.board.iter().enumerate() {
                 for (x, cell_colour) in row.iter().enumerate() {
-                    let cell = Position { x: x as i32, y: y as i32};
+                    let cell = Position {
+                        x: x as i32,
+                        y: y as i32,
+                    };
                     let rect = Self::cell_rectangle(&cell, x_cells, y_cells, &game_area);
                     let mut block = Block::default().borders(Borders::NONE);
 
-                    if let Some(blocks) = state.tetromino_blocks && blocks.contains(&cell) {
-                        let style = Style::default().bg(Self::map_colour(&state.tetromino_colour.unwrap()));
-                        block = block.style(style);
+                    if let Some(blocks) = state.tetromino_blocks {
+                        if blocks.contains(&cell) {
+                            let style = Style::default()
+                                .bg(Self::map_colour(&state.tetromino_colour.unwrap()));
+                            block = block.style(style);
+                        } else if let Some(colour) = cell_colour {
+                            let style = Style::default().bg(Self::map_colour(colour));
+                            block = block.style(style);
+                        }
                     } else if let Some(colour) = cell_colour {
                         let style = Style::default().bg(Self::map_colour(colour));
                         block = block.style(style);

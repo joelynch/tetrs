@@ -1,4 +1,3 @@
-#![feature(core_intrinsics)]
 use std::{
     sync::{Arc, Mutex},
     thread::{self, sleep},
